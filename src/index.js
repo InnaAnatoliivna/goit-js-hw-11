@@ -1,7 +1,7 @@
 import axios from "axios";
 import Notiflix from 'notiflix';
-// import SimpleLightbox from "simplelightbox";
-// import "simplelightbox/dist/simple-lightbox.min.css";
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
 //------------------------------------------------------
 
 
@@ -53,7 +53,7 @@ async function serviceSearchImages(page = 1) {
 
             if (imagesAll.length === 0) {
                 if (page === 1) {
-                Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again!')
+                    Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again!')
                 }
             } else {
                 Notiflix.Notify.info(`Hooray! We found ${totalHits} images.`)
