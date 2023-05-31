@@ -9,7 +9,7 @@ const refs = {
     listCard: document.querySelector('.js-list-cards'),
     btnLoadMore: document.querySelector('.dtn-load-more')
 }
-let page = 1; 
+let page = 1;
 //events on btn
 refs.form.addEventListener('submit', hendlerSearchForm);
 refs.btnLoadMore.addEventListener('click', hendlerLoadMore);
@@ -22,7 +22,7 @@ function hendlerSearchForm(event) {
     event.preventDefault();
     // const inputSearchValue = refs.inputSearch.value.trim();
     page = 1;
-        //cleaning cards before new search:
+    //cleaning cards before new search:
     clearListCards();
 
     serviceSearchImages();
@@ -32,8 +32,12 @@ function hendlerSearchForm(event) {
  * function for create request on server and get data
  */
 async function serviceSearchImages() {
+
     const inputValue = refs.inputSearch.value.trim();
-    const url = `${BASE_URL}?key=${API_KEY}&q=${inputValue}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=40`
+    console.log(inputValue)
+
+    const url = `${BASE_URL}?key=${API_KEY}&q=${encodeURIComponent(inputValue)}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=40`
+    console.log(inputValue)
 
     await axios.get(url)
         .then(response => {
@@ -53,20 +57,17 @@ async function serviceSearchImages() {
                     refs.btnLoadMore.style.display = 'none';
                 }
             }
-            
+
         })
         .catch(error => {
             console.log(error)
         });
 }
-// servisSearchImages()
-
 
 /**========================================================================
  * function for create  markup 
  * @param {*object} image 
  */
-
 function createMarkup(image) {
     return `
     <div class="photo-card">
@@ -89,11 +90,17 @@ function renderDataImage(array) {
     refs.listCard.insertAdjacentHTML('beforeend', cardsImage);
 }
 
+/**==========================================================================
+ * function for clear list with cards and input
+ */
 function clearListCards() {
     refs.listCard.innerHTML = '';
     refs.inputSearch.value = '';
 }
 
+/**==========================================================================
+ * function for hendler button "Load more"
+ */
 function hendlerLoadMore() {
     page++;
     serviceSearchImages()
