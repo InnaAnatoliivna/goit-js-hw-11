@@ -1,6 +1,12 @@
 <div class="form-wrapper">
   <form class="form" action="submit">
-    <input class="form-input" type="text"/>
+    <input
+      class="form-input"
+      type="text"
+      name="searchQuery"
+      autocomplete="off"
+      placeholder="Search images..."
+    />
     <button class="form-btn">
       <svg class="form-btn-icon" width="14" height="14">
         <use href="./images/sprite.svg#icon-search"></use>
@@ -8,3 +14,5 @@
     </button>
   </form>
 </div>
+<ul class="js-list-cards"></ul>
+<button type="button" class="dtn-load-more">Load more</button>

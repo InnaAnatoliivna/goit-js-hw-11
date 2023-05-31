@@ -7,11 +7,18 @@
 }
 .form-btn {
   padding: 13px 15px;
+  border-color: transparent;
+  transition: background-color, linear, 400ms;
+}
+.form-btn:is(:hover, :focus) {
+  background-color: #d6d6d6c7;
 }
 
 .form-input {
   width: 350px;
   height: 45px;
+  border-color: transparent;
+  padding-left: 10px;
 }
 
 .form-wrapper {
@@ -27,4 +34,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+//----------cards--------
+.js-list-cards{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.photo-card {
+  border: 1.2px solid black;
+  padding: 5px;
 }
