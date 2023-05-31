@@ -1,4 +1,9 @@
 import axios from "axios";
+import Notiflix from 'notiflix';
+// import SimpleLightbox from "simplelightbox";
+// import "simplelightbox/dist/simple-lightbox.min.css";
+//------------------------------------------------------
+
 
 const API_KEY = '36885603-fb02061b93c5e3b035d34c370';
 const BASE_URL = 'https://pixabay.com/api/';
@@ -12,7 +17,7 @@ const refs = {
 let page = 1;
 //events on btn
 refs.form.addEventListener('submit', hendlerSearchForm);
-refs.btnLoadMore.addEventListener('click', hendlerLoadMore);
+// refs.btnLoadMore.addEventListener('click', hendlerLoadMore);
 
 /**========================================================================
  * function hendler on form
@@ -20,8 +25,7 @@ refs.btnLoadMore.addEventListener('click', hendlerLoadMore);
  */
 function hendlerSearchForm(event) {
     event.preventDefault();
-    // const inputSearchValue = refs.inputSearch.value.trim();
-    page = 1;
+
     //cleaning cards before new search:
     clearListCards();
 
@@ -31,13 +35,13 @@ function hendlerSearchForm(event) {
 /**========================================================================
  * function for create request on server and get data
  */
-async function serviceSearchImages() {
+async function serviceSearchImages(page = 1) {
 
     const inputValue = refs.inputSearch.value.trim();
-    console.log(inputValue)
+    // console.log(inputValue)
 
     const url = `${BASE_URL}?key=${API_KEY}&q=${encodeURIComponent(inputValue)}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=40`
-    console.log(inputValue)
+    // console.log(inputValue)
 
     await axios.get(url)
         .then(response => {
@@ -45,17 +49,21 @@ async function serviceSearchImages() {
             const imagesAll = data.hits;
             const totalHits = data.totalHits;
 
+
+
             if (imagesAll.length === 0) {
                 if (page === 1) {
-                    alert('Sorry, there are no images matching your search query. Please try again!')
+                Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again!')
                 }
             } else {
+                Notiflix.Notify.info(`Hooray! We found ${totalHits} images.`)
                 renderDataImage(imagesAll);
-                if (imagesAll.length < totalHits) {
-                    refs.btnLoadMore.style.display = 'block';
-                } else {
-                    refs.btnLoadMore.style.display = 'none';
-                }
+            }
+            if (imagesAll.length < totalHits) {
+                observer.observe(guard);
+            } else if (imagesAll.length === totalHits) {
+                // Notiflix.Notify.info("We're sorry, but you've reached the end of search results.")
+                observer.unobserve(guard);
             }
 
         })
@@ -68,10 +76,14 @@ async function serviceSearchImages() {
  * function for create  markup 
  * @param {*object} image 
  */
-function createMarkup(image) {
+function createMarkup(image, lightbox) {
     return `
     <div class="photo-card">
-        <img src="${image.webformatURL}" alt="${image.tags}" loading="lazy" width="335"/>
+        <div class="gallery">
+            <a class="gallery__link" href="${image.largeImageURL}">
+                <img src="${image.webformatURL}" alt="${image.tags}" loading="lazy" width="335"/>
+            </a>
+        </div>
         <div class="info">
             <p class="info-item"><b>Likes: </b>${image.likes}</p>
             <p class="info-item"><b>Views: </b> ${image.views}</p>
@@ -88,6 +100,7 @@ function renderDataImage(array) {
     const cardsImage = array.map(image => createMarkup(image)).join('');
     // refs.listCard.innerHTML = cardsImage;
     refs.listCard.insertAdjacentHTML('beforeend', cardsImage);
+
 }
 
 /**==========================================================================
@@ -95,13 +108,45 @@ function renderDataImage(array) {
  */
 function clearListCards() {
     refs.listCard.innerHTML = '';
-    refs.inputSearch.value = '';
+    // refs.inputSearch.value = '';
 }
 
-/**==========================================================================
- * function for hendler button "Load more"
- */
-function hendlerLoadMore() {
-    page++;
-    serviceSearchImages()
+
+//--* INTRSECTION OBSERVER *----------------------------------------------------
+
+const guard = document.querySelector('.js-guard');
+
+let options = {
+    root: null,
+    rootMargin: "330px",
+    threshold: 0,
 }
+
+let observer = new IntersectionObserver(handlerPagination, options);
+
+/**
+ * function callback Intersection observer
+ * @param {*} entries 
+ */
+function handlerPagination(entries) {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            page += 1;
+            serviceSearchImages(page);
+        }
+    })
+}
+
+
+//------- usage simplelightbox -----------------------------------
+
+const lightbox = new SimpleLightbox('.gallery a');
+
+
+//----------------* Smooth page scrolling *------------------------
+const { height: cardHeight } = refs.listCard.firstElementChild.getBoundingClientRect();
+
+window.scrollBy({
+    top: cardHeight * 2,
+    behavior: "smooth",
+});
