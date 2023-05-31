@@ -21,13 +21,13 @@ refs.form.addEventListener('submit', hendlerSearchForm);
  * function hendler on form
  * @param {*string} event 
  */
-function hendlerSearchForm(event) {
+async function hendlerSearchForm(event) {
     event.preventDefault();
 
     //cleaning cards before new search:
     clearListCards();
 
-    serviceSearchImages();
+    await serviceSearchImages();
 }
 
 /**========================================================================
@@ -46,8 +46,6 @@ async function serviceSearchImages(page = 1) {
             const { data } = response;
             const imagesAll = data.hits;
             const totalHits = data.totalHits;
-
-
 
             if (imagesAll.length === 0) {
                 if (page === 1) {
