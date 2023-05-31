@@ -11,13 +11,11 @@ const BASE_URL = 'https://pixabay.com/api/';
 const refs = {
     form: document.querySelector('.form'),
     inputSearch: document.querySelector('[name="searchQuery"]'),
-    listCard: document.querySelector('.js-list-cards'),
-    btnLoadMore: document.querySelector('.dtn-load-more')
+    listCard: document.querySelector('.js-list-cards')
 }
 let page = 1;
 //events on btn
 refs.form.addEventListener('submit', hendlerSearchForm);
-// refs.btnLoadMore.addEventListener('click', hendlerLoadMore);
 
 /**========================================================================
  * function hendler on form
@@ -101,6 +99,14 @@ function renderDataImage(array) {
     // refs.listCard.innerHTML = cardsImage;
     refs.listCard.insertAdjacentHTML('beforeend', cardsImage);
 
+    //------- usage simplelightbox -----------------------------------
+    const lightbox = new SimpleLightbox('.gallery a');
+    //----------------* Smooth page scrolling *-----------------------
+    const { height: cardHeight } = refs.listCard.firstElementChild.getBoundingClientRect();
+    window.scrollBy({
+        top: cardHeight * 0,
+        behavior: "smooth",
+});
 }
 
 /**==========================================================================
@@ -136,17 +142,3 @@ function handlerPagination(entries) {
         }
     })
 }
-
-
-//------- usage simplelightbox -----------------------------------
-
-const lightbox = new SimpleLightbox('.gallery a');
-
-
-//----------------* Smooth page scrolling *------------------------
-const { height: cardHeight } = refs.listCard.firstElementChild.getBoundingClientRect();
-
-window.scrollBy({
-    top: cardHeight * 2,
-    behavior: "smooth",
-});
