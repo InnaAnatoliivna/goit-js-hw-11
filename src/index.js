@@ -146,7 +146,7 @@ function renderDataImage(array) {
     //----------------* Smooth page scrolling *--------------------------
     const { height: cardHeight } = refs.listCard.firstElementChild.getBoundingClientRect();
     window.scrollBy({
-        top: cardHeight * 2,
+        top: cardHeight * 0.4,
         behavior: "smooth",
     });
     //------- usage simplelightbox
