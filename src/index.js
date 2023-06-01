@@ -1,7 +1,7 @@
 import axios from "axios";
 import Notiflix from 'notiflix';
-// import SimpleLightbox from "simplelightbox";
-// import "simplelightbox/dist/simple-lightbox.min.css";
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
 //------------------------------------------------------
 
 const API_KEY = '36885603-fb02061b93c5e3b035d34c370';
@@ -25,7 +25,13 @@ let options = {
 let observer = new IntersectionObserver(handlerPagination, options);
 
 let page = 1;
+let totalHits = 0;//+
+const perPage = 40; //+
+
+// //------- usage simplelightbox -----------------------------------
+const lightbox = new SimpleLightbox('.gallery a');
 //events on btn
+
 refs.form.addEventListener('submit', hendlerSearchForm);
 
 /**========================================================================
@@ -37,6 +43,7 @@ async function hendlerSearchForm(event) {
 
     //cleaning cards before new search:
     clearListCards();
+    page = 1; //+
 
     await serviceSearchImages();
 }
@@ -57,26 +64,26 @@ async function serviceSearchImages() {
 
         const { data } = response;
         const imagesAll = data.hits;
-        const totalHits = data.totalHits;
+        totalHits = data.totalHits;
 
         if (imagesAll.length === 0) {
-                if (page === 1) {
-                    Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again!')
-                }
-            } else {
-                Notiflix.Notify.info(`Hooray! We found ${totalHits} images.`)
-                renderDataImage(imagesAll);
+            if (page === 1) {
+                Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again!')
             }
-            if (imagesAll.length < totalHits) {
-                observer.observe(guard);
-            } else if (imagesAll.length === totalHits) {
-                // Notiflix.Notify.info("We're sorry, but you've reached the end of search results.")
-                observer.unobserve(guard);
-            }
+        } else {
+            Notiflix.Notify.info(`Hooray! We found ${totalHits} images.`)
+            renderDataImage(imagesAll);
+        }
+        if (imagesAll.length < totalHits) {
+            observer.observe(guard);
+        } else if (imagesAll.length === totalHits) {
+            // Notiflix.Notify.info("We're sorry, but you've reached the end of search results.")
+            observer.unobserve(guard);
+        }
     } catch (error) {
         console.log(error)
     }
-    
+
 
     // await axios.get(url)
     //     .then(response => {
@@ -134,15 +141,16 @@ function renderDataImage(array) {
     // refs.listCard.innerHTML = cardsImage;
     refs.listCard.insertAdjacentHTML('beforeend', cardsImage);
 
-    // //------- usage simplelightbox -----------------------------------
-    // const lightbox = new SimpleLightbox('.gallery a');
+
 
     //----------------* Smooth page scrolling *--------------------------
     const { height: cardHeight } = refs.listCard.firstElementChild.getBoundingClientRect();
     window.scrollBy({
         top: cardHeight * 2,
         behavior: "smooth",
-});
+    });
+    //------- usage simplelightbox
+    lightbox.refresh();
 }
 
 /**==========================================================================
@@ -158,9 +166,9 @@ function clearListCards() {
  */
 async function handlerPagination(entries) {
     entries.forEach(async entry => {
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && page * perPage < totalHits) {
             page += 1;
-            await serviceSearchImages();
+            await serviceSearchImages(page);
         }
     })
 }
