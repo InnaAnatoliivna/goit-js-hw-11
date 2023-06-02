@@ -15,13 +15,11 @@ const refs = {
 
 const guard = document.querySelector('.js-guard');
 //--* INTRSECTION OBSERVER *----------------------------------------------------
-
 let options = {
     root: null,
     rootMargin: "330px",
     threshold: 0,
 }
-
 let observer = new IntersectionObserver(handlerPagination, options);
 
 // let page = 1;
@@ -43,6 +41,7 @@ async function hendlerSearchForm(event) {
 
     //cleaning cards before new search:
     clearListCards();
+
     page = 1; //+
 
     await serviceSearchImages();
@@ -120,19 +119,20 @@ function renderDataImage(array) {
         top: cardHeight * 0.4,
         behavior: "smooth",
     });
+
     //------- usage simplelightbox
     lightbox.refresh();
 }
 
 /**==========================================================================
- * function for clear list with cards and input
+ * function for clear list with cards 
  */
 function clearListCards() {
     refs.listCard.innerHTML = '';
 }
 
 /**===========================================================================
- * function callback Intersection observer
+ * function callback by Intersection observer
  * @param {*params} entries //It is params of global class IntersectionObserver 
  */
 async function handlerPagination(entries) {
