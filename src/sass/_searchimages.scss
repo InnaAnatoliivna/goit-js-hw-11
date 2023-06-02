@@ -52,18 +52,21 @@
   border-radius: 3px;
   padding: 5px;
   box-shadow: 13px 14px 17px -17px rgba(0,0,0,0.89);
--webkit-box-shadow: 13px 14px 17px -17px rgba(0,0,0,0.89);
--moz-box-shadow: 13px 14px 17px -17px rgba(0,0,0,0.89);
+  -webkit-box-shadow: 13px 14px 17px -17px rgba(0,0,0,0.89);
+  -moz-box-shadow: 13px 14px 17px -17px rgba(0,0,0,0.89);
 
   // height: 330px;
   height: auto;
+
+  transition: border linear 400ms,
+  box-shadow linear 400ms;
 }
 
 .photo-card:is(:hover, :focus) {
-    border: 1.2px solid rgba(0, 0, 0, 0.266);
-box-shadow: 8px -1px 27px -11px rgba(0,0,0,0.84) inset;
--webkit-box-shadow: 8px -1px 27px -11px rgba(0,0,0,0.84) inset;
--moz-box-shadow: 8px -1px 27px -11px rgba(0,0,0,0.84) inset;
+  border: 1.2px solid rgba(0, 0, 0, 0.266);
+  box-shadow: 8px -1px 27px -11px rgba(0,0,0,0.84) inset;
+  -webkit-box-shadow: 8px -1px 27px -11px rgba(0,0,0,0.84) inset;
+  -moz-box-shadow: 8px -1px 27px -11px rgba(0,0,0,0.84) inset;
 }
 
 .info {
