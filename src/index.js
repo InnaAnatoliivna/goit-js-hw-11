@@ -2,7 +2,7 @@ import axios from "axios";
 import Notiflix from 'notiflix';
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
-//------------------------------------------------------
+//------------------------------------------------------------------------------
 
 const API_KEY = '36885603-fb02061b93c5e3b035d34c370';
 const BASE_URL = 'https://pixabay.com/api/';
@@ -22,15 +22,17 @@ let options = {
 }
 let observer = new IntersectionObserver(handlerPagination, options);
 
-// let page = 1;
+
+let page = 1;
 let totalHits = 0;//+
 const perPage = 40; //+
 
-// //------- usage simplelightbox -----------------------------------
+// //------- usage simplelightbox ---------------------------------------------
 const lightbox = new SimpleLightbox('.gallery a');
 
 //event on btn
 refs.form.addEventListener('submit', hendlerSearchForm);
+
 
 /**========================================================================
  * function hendler on form
@@ -46,6 +48,7 @@ async function hendlerSearchForm(event) {
 
     await serviceSearchImages();
 }
+
 
 /**========================================================================
  * function for create request on server and get data
@@ -84,6 +87,7 @@ async function serviceSearchImages() {
     }
 }
 
+
 /**========================================================================
  * function for create  markup 
  * @param {*object} image 
@@ -104,6 +108,8 @@ function createMarkup(image) {
         </div>
     </div>`;
 }
+
+
 /**==========================================================================
  * function for render data from array in markup
  * @param {string} array 
@@ -113,7 +119,7 @@ function renderDataImage(array) {
     // refs.listCard.innerHTML = cardsImage;
     refs.listCard.insertAdjacentHTML('beforeend', cardsImage);
 
-    //----------------* Smooth page scrolling *--------------------------
+    //----------------* Smooth page scrolling *--------------------------------
     const { height: cardHeight } = refs.listCard.firstElementChild.getBoundingClientRect();
     window.scrollBy({
         top: cardHeight * 0.4,
@@ -124,12 +130,14 @@ function renderDataImage(array) {
     lightbox.refresh();
 }
 
+
 /**==========================================================================
  * function for clear list with cards 
  */
 function clearListCards() {
     refs.listCard.innerHTML = '';
 }
+
 
 /**===========================================================================
  * function callback by Intersection observer
