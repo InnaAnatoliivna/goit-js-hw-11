@@ -24,14 +24,14 @@ let options = {
 
 let observer = new IntersectionObserver(handlerPagination, options);
 
-let page = 1;
+// let page = 1;
 let totalHits = 0;//+
 const perPage = 40; //+
 
 // //------- usage simplelightbox -----------------------------------
 const lightbox = new SimpleLightbox('.gallery a');
-//events on btn
 
+//event on btn
 refs.form.addEventListener('submit', hendlerSearchForm);
 
 /**========================================================================
@@ -83,33 +83,6 @@ async function serviceSearchImages() {
     } catch (error) {
         console.log(error)
     }
-
-
-    // await axios.get(url)
-    //     .then(response => {
-    //         const { data } = response;
-    //         const imagesAll = data.hits;
-    //         const totalHits = data.totalHits;
-
-    //         if (imagesAll.length === 0) {
-    //             if (page === 1) {
-    //                 Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again!')
-    //             }
-    //         } else {
-    //             Notiflix.Notify.info(`Hooray! We found ${totalHits} images.`)
-    //             renderDataImage(imagesAll);
-    //         }
-    //         if (imagesAll.length < totalHits) {
-    //             observer.observe(guard);
-    //         } else if (imagesAll.length === totalHits) {
-    //             // Notiflix.Notify.info("We're sorry, but you've reached the end of search results.")
-    //             observer.unobserve(guard);
-    //         }
-
-    //     })
-    //     .catch(error => {
-    //         console.log(error)
-    //     });
 }
 
 /**========================================================================
@@ -140,8 +113,6 @@ function renderDataImage(array) {
     const cardsImage = array.map(image => createMarkup(image)).join('');
     // refs.listCard.innerHTML = cardsImage;
     refs.listCard.insertAdjacentHTML('beforeend', cardsImage);
-
-
 
     //----------------* Smooth page scrolling *--------------------------
     const { height: cardHeight } = refs.listCard.firstElementChild.getBoundingClientRect();
